@@ -6,12 +6,11 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 20:44:25 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/02 12:23:10 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/12 14:06:47 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
 static void	*ftt_memcpy(void *dst, const void *src, size_t n)
 {

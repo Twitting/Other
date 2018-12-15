@@ -6,12 +6,11 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 15:03:07 by twitting          #+#    #+#             */
-/*   Updated: 2018/11/29 18:44:38 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/12 14:07:16 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
 void	ft_memdel(void **ap)
 {

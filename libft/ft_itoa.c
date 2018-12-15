@@ -6,12 +6,11 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 19:23:39 by twitting          #+#    #+#             */
-/*   Updated: 2018/11/29 17:16:18 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/12 14:01:33 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
 static int	ft_countnum(unsigned int n)
 {

@@ -6,12 +6,11 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 12:13:00 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/02 11:13:36 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/12 14:18:04 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
 static int	ft_countwords(char const *s, char c)
 {

@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   fillit.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/21 12:42:50 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/12 14:19:46 by twitting         ###   ########.fr       */
+/*   Created: 2018/12/11 14:40:15 by twitting          #+#    #+#             */
+/*   Updated: 2018/12/11 19:30:52 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef FILLIT_H
+# define FILLIT_H
 
-void		ft_putnbr_fd(int n, int fd)
+# include <stdlib.h>
+# include <fcntl.h>
+# include <unistd.h>
+
+typedef struct		s_grid
 {
-	if (n == -2147483648)
-	{
-		write(fd, "-2147483648", 11);
-		return ;
-	}
-	if (n < 0)
-	{
-		n *= -1;
-		ft_putchar_fd('-', fd);
-	}
-	if (n >= 10)
-		ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd((char)(n % 10 + '0'), fd);
-}
+	char			grid[15][15];
+	int				size;
+}					t_grid;
+
+int					ft_disp(t_grid *grid);
+int					ft_digit(int fd, int fig[27][9]);
+int					ft_input(int fig[27][9], char *filename);
+int					ft_recur(t_grid *grid, int fig[27][9], int fignum);
+
+#endif

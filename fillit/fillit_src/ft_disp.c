@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_disp.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/21 12:42:50 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/12 14:19:46 by twitting         ###   ########.fr       */
+/*   Created: 2018/12/11 15:59:53 by twitting          #+#    #+#             */
+/*   Updated: 2018/12/11 16:34:55 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "fillit.h"
 
-void		ft_putnbr_fd(int n, int fd)
+void	ft_putchar(char c)
 {
-	if (n == -2147483648)
+	write(1, &c, 1);
+}
+
+int		ft_disp(t_grid *grid)
+{
+	int i;
+	int j;
+
+	j = 0;
+	while (j < grid->size)
 	{
-		write(fd, "-2147483648", 11);
-		return ;
+		i = 0;
+		while (i < grid->size)
+		{
+			ft_putchar(grid->grid[j][i]);
+			i++;
+		}
+		ft_putchar('\n');
+		j++;
 	}
-	if (n < 0)
-	{
-		n *= -1;
-		ft_putchar_fd('-', fd);
-	}
-	if (n >= 10)
-		ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd((char)(n % 10 + '0'), fd);
+	return (1);
 }

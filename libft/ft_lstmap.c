@@ -6,12 +6,11 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/28 20:07:06 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/02 16:07:54 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/12 14:05:58 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
 static void	ftt_lstclear(t_list *lst)
 {
@@ -34,6 +33,8 @@ t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 	t_list	*tmp;
 
 	if (lst == NULL || f == NULL)
+		return (NULL);
+	if (!(newlst = (t_list *)malloc(sizeof(t_list))))
 		return (NULL);
 	if (f(lst) == NULL)
 		return (NULL);
