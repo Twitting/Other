@@ -6,7 +6,7 @@
 #    By: twitting <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 14:23:06 by twitting          #+#    #+#              #
-#    Updated: 2018/12/02 11:09:22 by twitting         ###   ########.fr        #
+#    Updated: 2018/12/20 20:34:24 by twitting         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,8 @@ SRC = ft_atoi.c \
 	ft_swapi.c \
 	ft_swapptr.c \
 	ft_tolower.c \
-	ft_toupper.c
+	ft_toupper.c \
+	get_next_line.c
 OBJECTS = $(SRC:%.c=%.o)
 FLAGS = -Wall -Wextra -Werror -c
 

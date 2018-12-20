@@ -6,7 +6,7 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/02 15:06:21 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/12 14:24:51 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/20 19:34:43 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int			get_next_line(const int fd, char **line)
 	while (0 < (readed = read(fd, buff, BUFF_SIZE)))
 	{
 		if (!(str[fd]))
-			if (!(str[fd] = ft_strnew(1)))
+			if (!(str[fd] = ft_strnew(0)))
 				return (-1);
 		buff[readed] = '\0';
 		if (!(tmp = ft_strjoin(str[fd], buff)))
