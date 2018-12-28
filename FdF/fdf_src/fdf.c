@@ -6,25 +6,40 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 15:12:37 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/23 14:56:18 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/28 13:14:23 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <stdio.h>
 
-t_mlx	*ft_init(void)
+t_mlx	*ft_init(char *filename)
 {
 	t_mlx	*mlx;
 
 	if (!(mlx = (t_mlx *)malloc(sizeof(t_mlx))))
 		return (NULL);
+	mlx->altitude = 10;
+	mlx->scale = -1;
+	mlx->pts = NULL;
+	mlx->ptssmall = NULL;
+	mlx->offset_x = -1;
+	mlx->offset_y = 170;
+	mlx->w_hi = 1000;
+	mlx->w_wi = 1200;
+	mlx->filename = NULL;
 	mlx->mlx_ptr = mlx_init();
-	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, 1200, 1000, "FdF");
+	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->w_wi, mlx->w_hi, filename);
+	mlx->projection = 0.7;
+	if (!(mlx->filename = ft_strdup(filename)))
+	{
+		free(mlx->mlx_ptr);
+		free(mlx->win_ptr);
+		return (NULL);
+	}
 	return (mlx);
 }
 
-void	ft_iso(t_point ***pts, int scale, int offset)
+void	ft_iso(t_point ***ptssmall, t_mlx *mlx)
 {
 	int prev_x;
 	int prev_y;
@@ -32,65 +47,62 @@ void	ft_iso(t_point ***pts, int scale, int offset)
 	int	j;
 
 	i = 0;
-	while (pts[i])
+	while (ptssmall[i])
 	{
 		j = 0;
-		while (pts[i][j])
+		while (ptssmall[i][j])
 		{
-			prev_x = pts[i][j]->x;
-			prev_y = pts[i][j]->y;
-			pts[i][j]->x = offset + (scale * ((prev_x - prev_y) *
-						cos(0.46373398)));
-			pts[i][j]->y = 200 + (scale * ((pts[i][j]->z) / 10 *
-						(-1) + (prev_x + prev_y) * sin(0.46373398)));
+			prev_x = ptssmall[i][j]->x;
+			prev_y = ptssmall[i][j]->y;
+			mlx->pts[i][j]->x = mlx->offset_x + (mlx->scale *
+				(prev_x * cos(mlx->projection) - prev_y *
+				sin(mlx->projection)) * cos(0.46373398));
+			mlx->pts[i][j]->y = mlx->offset_y + (mlx->scale *
+				ptssmall[i][j]->z * mlx->altitude / 10 * (-1)) +
+				(mlx->scale * (prev_x * sin(mlx->projection) +
+				prev_y * cos(mlx->projection)) * sin(0.46373398));
 			j++;
 		}
 		i++;
 	}
 }
 
-void	ft_error(int n)
+void	ft_fdf(t_mlx *mlx)
 {
-	if (n == 1)
-		write(2, "usage: ./FdF filename\n", 22);
-	else if (n == 2)
-		write(2, "error\n", 6);
-	exit(n);
-}
+	int		*hiwi;
 
-int		ft_keyboard(int key, void *param)
-{
-	param = NULL;
-	if (key == 53)
-		exit(0);
-	return (0);
+	hiwi = NULL;
+	if (!(hiwi = ft_hiwi(mlx->ptssmall)))
+		ft_error(2, mlx, hiwi);
+	if (mlx->scale == -1 || mlx->offset_x == -1)
+	{
+		mlx->scale = (hiwi[0] > hiwi[1]) ? 600 / hiwi[0] : 600 / hiwi[1];
+		mlx->offset_x = 200 + hiwi[0] * 4 / 5 * mlx->scale;
+	}
+	ft_iso(mlx->ptssmall, mlx);
+	if (ft_printlines(hiwi, mlx) == 0)
+		ft_error(2, mlx, hiwi);
 }
 
 int		main(int argc, char **argv)
 {
 	t_mlx	*mlx;
-	t_point	***pts;
-	int		*hiwi;
-	int		scale;
-	int		offset;
 
-	mlx = NULL;
-	hiwi = NULL;
-	if (argc == 2)
+	if (argc >= 2 && argc <= 3)
 	{
-		if (!(pts = ft_pointmaker(argv[1])) ||
-				!(mlx = ft_init()) ||
-				!(hiwi = ft_hiwi(pts)))
-			ft_error(2);
-		scale = (hiwi[0] > hiwi[1]) ? 600 / hiwi[0] : 600 / hiwi[1];
-		offset = 100 + hiwi[0] * 4 / 5 * scale;
-		ft_iso(pts, scale, offset);
-		if (ft_printlines(hiwi, pts, mlx) == 0)
-			ft_error(2);
-		mlx_key_hook(mlx->win_ptr, ft_keyboard, (void *)0);
+		if (!(mlx = ft_init(argv[1])))
+			ft_error(2, 0, 0);
+		if (argc == 3 && ft_atoi(argv[2]) != 0)
+			mlx->altitude = ft_atoi(argv[2]);
+		if (!(mlx->ptssmall = ft_pointmaker(argv[1])))
+			ft_error(2, mlx, 0);
+		if (!(mlx->pts = ft_pointmaker(argv[1])))
+			ft_error(2, mlx, 0);
+		ft_fdf(mlx);
+		mlx_key_hook(mlx->win_ptr, ft_keyboard, (void *)mlx);
 		mlx_loop(mlx->mlx_ptr);
 	}
 	else
-		ft_error(1);
+		ft_error(1, 0, 0);
 	return (0);
 }

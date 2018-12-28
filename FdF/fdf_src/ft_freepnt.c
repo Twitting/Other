@@ -41,7 +41,7 @@ void	ft_freepts(t_point ***pts, int py)
 	if (py == -1)
 		py = 2147483647;
 	i = 0;
-	while (pts[i])
+	while (pts[i] && py > 0)
 	{
 		ft_freepnt(pts[i], -1);
 		i++;
@@ -51,12 +51,12 @@ void	ft_freepts(t_point ***pts, int py)
 	pts = NULL;
 }
 
-void	ft_error(int n, t_point ***pts, t_mlx *mlx, int *hiwi)
+void	ft_error(int n, t_mlx *mlx, int *hiwi)
 {
-	if (pts)
-		ft_freepts(pts, -1);
 	if (mlx)
 	{
+		ft_freepts(mlx->pts, -1);
+		ft_freepts(mlx->ptssmall, -1);
 		free(mlx->mlx_ptr);
 		free(mlx->win_ptr);
 		free(mlx->filename);

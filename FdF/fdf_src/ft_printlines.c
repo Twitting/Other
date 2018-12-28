@@ -6,12 +6,11 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 17:31:25 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/23 14:55:33 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/25 21:27:27 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <stdio.h>
 
 int		*ft_hiwi(t_point ***pts)
 {
@@ -42,12 +41,12 @@ t_line	*ft_makeline(t_point *p1, t_point *p2)
 	line->y0 = p1->y;
 	line->x1 = p2->x;
 	line->y1 = p2->y;
-	if ((p1->z >= 0 && p1->z <= 5) || (p2->z >= 0 && p2->z <= 5))
-		line->color = 0x0022ff22;
+	if ((p1->z <= 5) || (p2->z <= 5))
+		line->color = 0x0011aa11;
 	else if ((p1->z >= 6 && p1->z <= 30) || (p2->z >= 6 && p2->z <= 30))
 		line->color = 0x00964b00;
 	else
-		line->color = 0x00ffffff;
+		line->color = 0x00dddddd;
 	return (line);
 }
 
@@ -103,11 +102,13 @@ int		ft_vertilines(int *hiwi, t_point ***pts, t_mlx *mlx)
 	return (1);
 }
 
-int		ft_printlines(int *hiwi, t_point ***pts, t_mlx *mlx)
+int		ft_printlines(int *hiwi, t_mlx *mlx)
 {
-	if (hiwi == NULL || pts == NULL || mlx == NULL)
+	if (hiwi == NULL || mlx == NULL)
 		return (0);
-	if (!(ft_vertilines(hiwi, pts, mlx)) || !(ft_horizlines(hiwi, pts, mlx)))
+	if (!(ft_vertilines(hiwi, mlx->pts, mlx)) ||
+		!(ft_horizlines(hiwi, mlx->pts, mlx)))
 		return (0);
+	ft_putinfo(mlx);
 	return (1);
 }

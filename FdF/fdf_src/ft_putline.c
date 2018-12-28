@@ -6,11 +6,10 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 15:45:43 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/23 14:55:46 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/28 15:12:03 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
 #include "fdf.h"
 
 void	ft_putlinelow(t_mlx *mlx, t_line *l)
@@ -31,7 +30,8 @@ void	ft_putlinelow(t_mlx *mlx, t_line *l)
 	x = l->x0 - 1;
 	while (++x <= l->x1)
 	{
-		mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, x, l->y0, l->color);
+		if (x >= 0 && x < mlx->w_wi && l->y0 >= 0 && l->y0 < mlx->w_hi)
+			mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, x, l->y0, l->color);
 		if (f > 0)
 		{
 			l->y0 = l->y0 + yi;
@@ -59,7 +59,8 @@ void	ft_putlinehigh(t_mlx *mlx, t_line *l)
 	y = l->y0 - 1;
 	while (++y <= l->y1)
 	{
-		mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, l->x0, y, l->color);
+		if (l->x0 >= 0 && l->x0 < mlx->w_wi && y >= 0 && y < mlx->w_hi)
+			mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, l->x0, y, l->color);
 		if (f > 0)
 		{
 			l->x0 = l->x0 + xi;
@@ -86,7 +87,7 @@ int		ft_putline(t_mlx *mlx, t_line *l)
 {
 	if (mlx == NULL || l == NULL)
 		return (0);
-	if (abs(l->y1 - l->y0) < abs(l->x1 - l->x0))
+	if ((int)fabs((double)(l->y1 - l->y0)) < (int)fabs((double)(l->x1 - l->x0)))
 	{
 		if (l->x0 > l->x1)
 			ft_putlinelow(mlx, ft_revln(l));

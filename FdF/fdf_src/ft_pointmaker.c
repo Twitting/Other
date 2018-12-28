@@ -6,26 +6,11 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 19:41:14 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/23 14:08:53 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/23 20:32:34 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-void	ft_freepnt(t_point ***pnt)
-{
-	int	i;
-
-	if (pnt == NULL)
-		return ;
-	i = 0;
-	while (*pnt[i])
-	{
-		free(*pnt[i]);
-		i++;
-	}
-	free(*pnt);
-}
 
 t_point	**arrmaker(char **str, int strnum, int wrdcnt)
 {
@@ -39,7 +24,7 @@ t_point	**arrmaker(char **str, int strnum, int wrdcnt)
 	{
 		if (!(pnt[i] = (t_point *)malloc(sizeof(t_point))))
 		{
-			ft_freepnt(&pnt);
+			ft_freepnt(pnt, i);
 			return (NULL);
 		}
 		pnt[i]->y = strnum;
@@ -108,8 +93,7 @@ t_point	***ft_pointmaker(char *filename)
 		if (!(pts[strnum] = arrmaker(ft_strsplit(line, ' '),
 						strnum, ft_wrdcnt(line))))
 		{
-			ft_freepnt(pts);
-			free(pts);
+			ft_freepts(pts, strnum);
 			return (NULL);
 		}
 		free(line);
