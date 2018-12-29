@@ -6,7 +6,7 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 15:43:24 by twitting          #+#    #+#             */
-/*   Updated: 2018/12/23 20:28:09 by twitting         ###   ########.fr       */
+/*   Updated: 2018/12/29 16:08:24 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@ typedef struct		s_point
 	int				z;
 }					t_point;
 
+typedef struct		s_img
+{
+	void			*img_ptr;
+	int				*data;
+	int				size_l;
+	int				bpp;
+	int				endian;
+}					t_img;
+
 typedef struct		s_mlx
 {
 	void			*mlx_ptr;
@@ -47,6 +56,7 @@ typedef struct		s_mlx
 	int				w_wi;
 	t_point			***ptssmall;
 	t_point			***pts;
+	t_img			img;
 }					t_mlx;
 
 void				ft_fdf(t_mlx *mlx);

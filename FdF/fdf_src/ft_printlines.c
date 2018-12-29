@@ -109,6 +109,7 @@ int		ft_printlines(int *hiwi, t_mlx *mlx)
 	if (!(ft_vertilines(hiwi, mlx->pts, mlx)) ||
 		!(ft_horizlines(hiwi, mlx->pts, mlx)))
 		return (0);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img_ptr, 0, 0);
 	ft_putinfo(mlx);
 	return (1);
 }

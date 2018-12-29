@@ -14,18 +14,19 @@
 
 void	ft_tilt_alt(int key, t_mlx *mlx)
 {
-	mlx_clear_window(mlx->mlx_ptr, mlx->win_ptr);
+	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
 	if (key == 83 || key == 86)
 		mlx->projection = (key == 83) ? mlx->projection + 0.05 :
 		mlx->projection - 0.05;
 	else if (key == 87 || key == 84)
 		(key == 87 ? mlx->altitude++ : mlx->altitude--);
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->w_wi, mlx->w_hi);
 	ft_fdf(mlx);
 }
 
 void	ft_arrows_scale(int key, t_mlx *mlx)
 {
-	mlx_clear_window(mlx->mlx_ptr, mlx->win_ptr);
+	mlx_destroy_image(mlx->mlx_ptr, mlx->img.img_ptr);
 	if (key == 123 || key == 124)
 		mlx->offset_x = (key == 124) ? mlx->offset_x - 50 : mlx->offset_x + 50;
 	else if (key == 125 || key == 126)
@@ -34,6 +35,7 @@ void	ft_arrows_scale(int key, t_mlx *mlx)
 		mlx->scale = (key == 69) ? mlx->scale * 2 : mlx->scale / 2;
 	if (mlx->scale == 0)
 		mlx->scale++;
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->w_wi, mlx->w_hi);
 	ft_fdf(mlx);
 }
 

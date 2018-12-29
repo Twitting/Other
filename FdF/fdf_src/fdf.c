@@ -26,10 +26,12 @@ t_mlx	*ft_init(char *filename)
 	mlx->offset_y = 170;
 	mlx->w_hi = 1000;
 	mlx->w_wi = 1200;
-	mlx->filename = NULL;
 	mlx->mlx_ptr = mlx_init();
 	mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, mlx->w_wi, mlx->w_hi, filename);
 	mlx->projection = 0.7;
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx_ptr, mlx->w_wi, mlx->w_hi);
+	mlx->img.data = (int *)mlx_get_data_addr(mlx->img.img_ptr, &mlx->img.bpp, \
+					&mlx->img.size_l, &mlx->img.endian);
 	if (!(mlx->filename = ft_strdup(filename)))
 	{
 		free(mlx->mlx_ptr);

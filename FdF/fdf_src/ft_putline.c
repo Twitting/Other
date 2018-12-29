@@ -31,7 +31,7 @@ void	ft_putlinelow(t_mlx *mlx, t_line *l)
 	while (++x <= l->x1)
 	{
 		if (x >= 0 && x < mlx->w_wi && l->y0 >= 0 && l->y0 < mlx->w_hi)
-			mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, x, l->y0, l->color);
+			mlx->img.data[l->y0 * mlx->w_wi + x] = l->color;
 		if (f > 0)
 		{
 			l->y0 = l->y0 + yi;
@@ -60,7 +60,7 @@ void	ft_putlinehigh(t_mlx *mlx, t_line *l)
 	while (++y <= l->y1)
 	{
 		if (l->x0 >= 0 && l->x0 < mlx->w_wi && y >= 0 && y < mlx->w_hi)
-			mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, l->x0, y, l->color);
+			mlx->img.data[y * mlx->w_wi + l->x0] = l->color;
 		if (f > 0)
 		{
 			l->x0 = l->x0 + xi;
