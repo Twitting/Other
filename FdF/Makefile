@@ -26,8 +26,13 @@ OBJECTS = fdf.o \
 		  ft_keyboard.o
 FLAGS = -Wall -Wextra -Werror
 FLAGS2 = -I /usr/local/include -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit
+FLAGS3 = /usr/local/lib/libmlx.a /usr/local/include/mlx.h -lXext -lX11 -lm
 
 all: $(NAME)
+
+linux:
+	make re -C libft/
+	sudo gcc $(FLAGS) $(SRC) $(SRC2) $(FLAGS3) -o $(NAME)
 
 $(NAME):
 	make re -C libft/
