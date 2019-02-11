@@ -1,0 +1,24 @@
+#!/bin/bash
+param=$1
+if [ "$1" != "" -a "$1" != "-r" ]
+then
+	echo "Usage: 03 [-r]"
+	exit 1
+else
+	if [ "$1" != "-r" ]
+	then
+		flag="-maxdepth 1"
+	else
+		flag=""
+	fi
+	for file in `find . $flag -mindepth 1 -type f`
+	do
+		filesize=$(stat -f%z $file)
+		if [ "$filesize" = "0" ]
+		then
+			echo "$file is empty. Deleting..."
+			rm "$file"
+		fi
+	done
+fi
+exit 0

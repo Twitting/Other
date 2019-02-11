@@ -1,0 +1,2 @@
+ifconfig | grep broadcast | cut -d ' ' -f6
+echo "192.168.20.1 - 192.168.21.254"
