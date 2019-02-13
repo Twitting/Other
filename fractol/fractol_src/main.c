@@ -6,7 +6,7 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/13 15:05:03 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:27:59 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,8 @@ int		argread(char *arg, t_fract *f)
 		f->set = 0;
 	else if (ft_strequ(arg, "julia") == 1)
 		f->set = 1;
-	else if (ft_strequ(arg, "tricorn") == 1)
-		f->set = 2;
 	else
-		ft_error(1, f);
+		f->set = 2;
 	fractol(f);
 	mlx_key_hook(f->win_ptr, ft_key, (void *)f);
 	mlx_mouse_hook(f->win_ptr, ft_mouse, (void *)f);
@@ -91,7 +89,8 @@ int		main(int argc, char **argv)
 	t_fract	*f;
 
 	f = NULL;
-	if (argc == 2)
+	if (argc == 2 && (ft_strequ(argv[1], "mandelbrot") ||
+				ft_strequ(argv[1], "julia") || ft_strequ(argv[1], "tricorn")))
 		argread(argv[1], f);
 	else
 		ft_error(1, f);
