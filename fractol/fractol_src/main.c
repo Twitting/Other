@@ -6,7 +6,7 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2018/11/29 18:54:07 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:05:03 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	ft_putinfo(t_fract *f)
 {
-	mlx_string_put(f->mlx_ptr, f->win_ptr, WINSIZE - 150, WINSIZE - 20,
+	mlx_string_put(f->mlx_ptr, f->win_ptr, WINSIZE - 200, WINSIZE - 20,
 				0xffffff, "Press ESC to exit");
 	if (f->set == 1)
 		mlx_string_put(f->mlx_ptr, f->win_ptr, 10, WINSIZE - 100,
 				0x33dd33, "Left click to magic");
 	else
 		mlx_string_put(f->mlx_ptr, f->win_ptr, 10, WINSIZE - 100,
-				0x33dd33, "Left click to invert colors");	
+				0x33dd33, "Left click to invert colors");
 	mlx_string_put(f->mlx_ptr, f->win_ptr, 10, WINSIZE - 80,
 				0x33dd33, "Mouse scroll to zoom");
 	mlx_string_put(f->mlx_ptr, f->win_ptr, 10, WINSIZE - 60,
@@ -31,7 +31,6 @@ void	ft_putinfo(t_fract *f)
 	mlx_string_put(f->mlx_ptr, f->win_ptr, 10, WINSIZE - 20,
 				0x33dd33, "Num+ and Num- to manage iterations");
 }
-
 
 void	fractol(t_fract *f)
 {
@@ -60,7 +59,7 @@ void	fractol(t_fract *f)
 	ft_putinfo(f);
 }
 
-int argread(char *arg, t_fract *f)
+int		argread(char *arg, t_fract *f)
 {
 	if (!(f = (t_fract *)malloc(sizeof(t_fract))))
 		ft_error(2, f);
@@ -87,7 +86,7 @@ int argread(char *arg, t_fract *f)
 	return (1);
 }
 
-int main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
 	t_fract	*f;
 

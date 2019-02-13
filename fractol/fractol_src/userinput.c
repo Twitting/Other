@@ -6,14 +6,14 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2018/11/29 18:54:07 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:12:16 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 #include <stdio.h>
 
-void zoom(int button, int x, int y, t_fract *f)
+void	zoom(int button, int x, int y, t_fract *f)
 {
 	if (button == 4)
 	{
@@ -32,29 +32,29 @@ void zoom(int button, int x, int y, t_fract *f)
 	fractol(f);
 }
 
-void mousethings(int button, int x, int y, t_fract *f)
+void	mousethings(int button, int x, int y, t_fract *f)
 {
 	x = x + y;
-	if (button == 1)
+	if (button == MOUSE_LB)
 	{
 		if (f->set == 1)
-			f->jl_toggler == 0 ? f->jl_toggler++: f->jl_toggler--;
+			f->jl_toggler == 0 ? f->jl_toggler++ : f->jl_toggler--;
 		else
 			f->inverter == 0 ? f->inverter++ : f->inverter--;
 	}
-	if (button == 2)
+	if (button == MOUSE_SB)
 	{
 		f->zoom = WINSIZE / 4;
-		f->xx = f->set == 1? -2 : -2.5;
+		f->xx = f->set == 1 ? -2 : -2.5;
 		f->yy = -2;
 		f->iternum = ITERNUM;
 	}
-	if (button == 3)
+	if (button == MOUSE_RB)
 		f->black == 0 ? f->black++ : f->black--;
 	fractol(f);
 }
 
-int ft_mouse(int button, int x, int y, void *f)
+int		ft_mouse(int button, int x, int y, void *f)
 {
 	if (button == 4 || button == 5)
 		zoom(button, x, y, (t_fract *)f);
@@ -63,7 +63,7 @@ int ft_mouse(int button, int x, int y, void *f)
 	return (1);
 }
 
-int ft_key(int key, void *f)
+int		ft_key(int key, void *f)
 {
 	if (key == KEY_LEFT)
 		((t_fract *)f)->xx -= 30 / ((t_fract *)f)->zoom;
@@ -83,7 +83,7 @@ int ft_key(int key, void *f)
 	return (1);
 }
 
-int mousemove(int x, int y, void *f)
+int		mousemove(int x, int y, void *f)
 {
 	if (((t_fract *)f)->jl_toggler)
 	{

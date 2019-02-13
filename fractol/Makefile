@@ -6,7 +6,7 @@
 #    By: twitting <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 14:23:06 by twitting          #+#    #+#              #
-#    Updated: 2018/12/28 17:52:24 by twitting         ###   ########.fr        #
+#    Updated: 2019/02/13 14:27:09 by twitting         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJECTS = julia.o \
 		  userinput.o \
 		  color.o
 FLAGS = -Wall -Wextra -Werror
-FLAGS2 = -I ./includes/ -I /usr/local/include -L /usr/local/lib -lmlx -lpthread -framework OpenGL -framework AppKit
+FLAGS2 = -Iincludes/ -I /usr/local/include -L /usr/local/lib -lmlx -lpthread -framework OpenGL -framework AppKit
 FLAGS_LINUX = -I ./includes_linux/ /usr/X11/lib/libmlx.a  -lXext -lX11 -lm -lpthread
 
 all: $(NAME)
@@ -36,7 +36,7 @@ linux:
 
 $(NAME):
 	make re -C libft/
-	gcc $(FLAGS) $(SRC) -c
+	gcc $(FLAGS) $(SRC) -Iincludes/ -c
 	gcc $(FLAGS) $(FLAGS2) $(OBJECTS) $(SRC2) -o $(NAME)
 
 clean:

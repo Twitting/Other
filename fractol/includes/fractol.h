@@ -6,7 +6,7 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2018/11/29 18:54:07 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:14:19 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,18 @@
 # include "../libft/libft.h"
 # include "mlx.h"
 
-
-# define WINSIZE 600
-# define ITERNUM 100
-# define KEY_UP 0xff52 //126
-# define KEY_DOWN 0xff54 //125
-# define KEY_LEFT 0xff51 //123
-# define KEY_RIGHT 0xff53 //124
-# define KEY_PLUS 0xffab //69
-# define KEY_MINUS 0xffad //78
-# define KEY_ESCAPE 0xff1b //53
+# define WINSIZE 900
+# define ITERNUM 50
+# define KEY_UP 126
+# define KEY_DOWN 125
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
+# define KEY_PLUS 69
+# define KEY_MINUS 78
+# define KEY_ESCAPE 53
 # define MOUSE_LB 1
-# define MOUSE_RB 3 //2
-# define MOUSE_SB 2 //3
+# define MOUSE_RB 2
+# define MOUSE_SB 3
 # define THREADS 4
 # define THREAD_HEIGHT (WINSIZE / THREADS)
 
@@ -44,7 +43,7 @@ typedef struct	s_img
 	int			endian;
 }				t_img;
 
-typedef struct	s_fract 
+typedef struct	s_fract
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
@@ -70,7 +69,7 @@ typedef struct	s_fract
 	int			black;
 	int			set;
 	int			noinit;
-	int 		jl_toggler;
+	int			jl_toggler;
 }				t_fract;
 
 void			ft_error(int errnum, t_fract *f);

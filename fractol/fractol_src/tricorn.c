@@ -6,13 +6,13 @@
 /*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2018/11/29 18:54:07 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:09:49 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void tricorn2(t_fract *f)
+void	tricorn2(t_fract *f)
 {
 	f->c_r = 1.0 * f->x / f->zoom + f->xx;
 	f->c_i = 1.0 * f->y / f->zoom + f->yy;
@@ -31,15 +31,16 @@ void tricorn2(t_fract *f)
 	f->img.data[f->y * WINSIZE + f->x] = f->color;
 }
 
-t_fract *ft_tc_init(t_fract *f)
+t_fract	*ft_tc_init(t_fract *f)
 {
 	f->noinit = 1;
-	if (!(f->win_ptr = mlx_new_window(f->mlx_ptr, WINSIZE, WINSIZE, "Tricorn set")))
+	if (!(f->win_ptr = mlx_new_window(f->mlx_ptr,
+					WINSIZE, WINSIZE, "Tricorn set")))
 		ft_error(3, f);
 	if (!(f->img.img_ptr = mlx_new_image(f->mlx_ptr, WINSIZE, WINSIZE)))
 		ft_error(3, f);
 	f->img.data = (int *)mlx_get_data_addr(f->img.img_ptr, &f->img.bpp,
-										   &f->img.size_l, &f->img.endian);
+			&f->img.size_l, &f->img.endian);
 	f->xx = -2.5;
 	f->yy = -2;
 	f->inverter = 1;
@@ -49,12 +50,11 @@ t_fract *ft_tc_init(t_fract *f)
 	return (f);
 }
 
-void *tricorn(void *f)
+void	*tricorn(void *f)
 {
 	while (((t_fract *)f)->y < ((t_fract *)f)->y_max)
 	{
 		((t_fract *)f)->x = 0;
-
 		while (((t_fract *)f)->x < WINSIZE)
 		{
 			tricorn2((t_fract *)f);
@@ -65,9 +65,7 @@ void *tricorn(void *f)
 	return (f);
 }
 
-
-
-void tc_pthread(t_fract *f)
+void	tc_pthread(t_fract *f)
 {
 	pthread_t	thread[THREADS];
 	t_fract		fract[THREADS];
