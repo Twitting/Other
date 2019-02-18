@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/13 15:15:14 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/18 17:01:36 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,30 @@ void	ft_error(int errnum, t_wolf *wolf)
 	exit(errnum);
 }
 
-
+void    wininit(t_wolf *wolf)
+{
+	wolf->mlx_ptr = mlx_init();
+	wolf->win_ptr = mlx_new_window(wolf->mlx_ptr, WWIN, HWIN, "Wolfenstein 3D");
+	wolf->img.img_ptr = mlx_new_image(wolf->mlx_ptr, WWIN, HWIN);
+	wolf->img.data = (int *)mlx_get_data_addr(wolf->img.img_ptr, &wolf->img.bpp, \
+	&wolf->img.size_l, &wolf->img.endian);
+}
 
 int		main(int argc, char **argv)
 {
-	int	**map;
-	int	i = 0;
+	t_wolf wolf;
 
-	map = NULL;
 	if (argc == 2)
 	{
-		if (!(map = getintmap(argv[1])))
+		if (!(wolf.map = getintmap(argv[1])))
 			return (1);
-		while (map[i] != 0)
-		{
-			printf("%d %d %d %d %d %d\n", map[i][0],
-			map[i][1], map[i][2], map[i][3], map[i][4], map[i][5]);
-			i++;
-		}
+		wininit(&wolf);
+		caster_init(&wolf);
+		raycaster(&wolf);
 	}
 	else
 		ft_error(1, NULL);
-	if (map != NULL)
-		i++;
+	mlx_key_hook(wolf.win_ptr, keyboard, &wolf);
+	mlx_loop(wolf.mlx_ptr);
 	return (0);
 }
