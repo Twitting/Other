@@ -6,7 +6,7 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/19 13:50:20 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/19 14:12:55 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void    wininit(t_wolf *wolf)
 	wolf->img.img_ptr = mlx_new_image(wolf->mlx_ptr, WWIN, HWIN);
 	wolf->img.data = (int *)mlx_get_data_addr(wolf->img.img_ptr, &wolf->img.bpp, \
 	&wolf->img.size_l, &wolf->img.endian);
-	//textoimg(wolf);
+	textoimg(wolf);
 }
 
 int		main(int argc, char **argv)
@@ -55,6 +55,7 @@ int		main(int argc, char **argv)
 		wininit(&wolf);
 		caster_init(&wolf);
 		raycaster(&wolf);
+		mlx_put_image_to_window(wolf.mlx_ptr, wolf.win_ptr, wolf.teximg[1].txtimg_ptr, 300, 300);
 	}
 	else
 		ft_error(1, NULL);
