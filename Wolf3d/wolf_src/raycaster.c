@@ -6,7 +6,7 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:59:41 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/18 17:53:47 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/19 12:07:58 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void    caster_init(t_wolf *wolf)
 {
-	wolf->posx = 4;
+	wolf->posx = 10;
 	wolf->posy = 4;
 	wolf->dirx = -1;
 	wolf->diry = 0;
@@ -69,7 +69,6 @@ void    findhit(t_wolf *w)
 		w->perpwalldist = (double)(w->mapx - w->posx + (1 - w->stepx) / 2.0) / w->raydirx;
 	else
 		w->perpwalldist = (double)(w->mapy - w->posy + (1 - w->stepy) / 2.0) / w->raydiry;
-	printf("%.2f ", w->raydiry);
 }
 
 void    drawline(t_wolf *w, int x)
@@ -102,7 +101,7 @@ void    raycaster(t_wolf *w)
 	x = 0;
 	while (x < WWIN)
 	{
-		w->color = 0x3333aa;
+		w->color = 0x3333ff;
 		w->hit = 0;
 		w->camerax = 2.0 * (double)x / (double)WWIN - 1.0;
 		w->raydirx = w->dirx + w->planex * w->camerax;

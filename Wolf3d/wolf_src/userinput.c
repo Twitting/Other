@@ -14,9 +14,9 @@
 
 int keyboard(int key, void *param)
 {
-	if (key == 53)
+	if (key == KEY_ESCAPE)
 	{
-		param = NULL;
+		((t_wolf *)param)->color = 0;
 		exit(0);	
 	}
 	return (0);
