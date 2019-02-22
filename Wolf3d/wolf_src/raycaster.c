@@ -6,7 +6,7 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:59:41 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/19 12:07:58 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/21 17:13:49 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void    caster_init(t_wolf *wolf)
 	wolf->diry = 0;
 	wolf->planex = 0;
 	wolf->planey = 0.66;
+	wolf->skyangle = 0;
 }
 
 void    sidecalc(t_wolf *w)
@@ -34,7 +35,7 @@ void    sidecalc(t_wolf *w)
 		w->stepx = 1;
 		w->sidedistx = (w->mapx + 1.0 - w->posx) * w->deltadistx;
 	}
-	if (w->raydiry > 0)
+	if (w->raydiry >= 0)
 	{
 		w->stepy = 1;
 		w->sidedisty = (w->mapy + 1.0 - w->posy) * w->deltadisty;
@@ -54,18 +55,24 @@ void    findhit(t_wolf *w)
 		{
 			w->sidedistx += w->deltadistx;
 			w->mapx += w->stepx;
-			w->side = 0;
+			if (w->raydirx < 0)
+				w->side = 0;
+			else
+				w->side = 2;
 		}
 		else
 		{
 			w->sidedisty += w->deltadisty;
 			w->mapy += w->stepy;
-			w->side = 1;
+			if (w->raydiry < 0)
+				w->side = 1;
+			else
+				w->side = 3;		
 		}
 		if (w->map[w->mapy][w->mapx] > 0)
 			w->hit = 1;
 	}
-	if (w->side == 0)
+	if (w->side == 0 || w->side == 2)
 		w->perpwalldist = (double)(w->mapx - w->posx + (1 - w->stepx) / 2.0) / w->raydirx;
 	else
 		w->perpwalldist = (double)(w->mapy - w->posy + (1 - w->stepy) / 2.0) / w->raydiry;
@@ -73,28 +80,18 @@ void    findhit(t_wolf *w)
 
 void    drawline(t_wolf *w, int x)
 {
-	int y;
-
-	x = (WWIN - 1) - x ;
-	w->lineheigth = (int)(HWIN / w->perpwalldist);
-	w->drawstart = -1 * w->lineheigth / 2 + HWIN / 2;
+	x = (WWIN - 1) - x;
+	w->lineheight = (int)(HWIN / w->perpwalldist);
+	w->drawstart = -1 * w->lineheight / 2 + HWIN / 2;
 	if (w->drawstart < 0)
 		w->drawstart = 0;
-	w->drawend = w->lineheigth / 2 + HWIN / 2;
+	w->drawend = w->lineheight / 2 + HWIN / 2;
 	if (w->drawend >= HWIN)
 		w->drawend = HWIN - 1;
-	w->color /= w->map[w->mapy][w->mapx];
-	if (w->side == 1)
-		w->color /= 2;
-	y = w->drawstart;
-	while (y < w->drawend)
-	{
-		w->img.data[y * WWIN + x] = w->color;
-		y++;
-	}
+	texdraw(w, x);
 }
 
-void    raycaster(t_wolf *w)
+int    raycaster(t_wolf *w)
 {
 	int     x;
 
@@ -113,7 +110,9 @@ void    raycaster(t_wolf *w)
 		sidecalc(w);
 		findhit(w);
 		drawline(w, x);
+		drawfloor(w, x);
 		x++;
 	}
 	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img.img_ptr, 0, 0);
+	return (0);
 }
