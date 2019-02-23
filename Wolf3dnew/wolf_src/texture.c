@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:22:16 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/21 19:23:01 by ebednar          ###   ########.fr       */
+/*   Updated: 2019/02/23 14:51:53 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	textoimg(t_wolf *w)
 {
-	char	*str[9];
+	char	*str[11];
 	int		i;
 
 	i = 0;
@@ -27,7 +27,9 @@ void	textoimg(t_wolf *w)
 	str[6] = TEX6;
 	str[7] = TEX7;
 	str[8] = SKY;
-	while (i < 9)
+	str[9] = BAR;
+	str[10] = BAR;
+	while (i < 11)
 	{
 		w->teximg[i].img_ptr = mlx_xpm_file_to_image(w->mlx_ptr, str[i], \
 				&w->teximg[i].txtwidth, &w->teximg[i].txtheight);
@@ -46,7 +48,7 @@ void	floorandceiling(t_wolf *w, int x)
 	{
 		if (y <= w->drawstart)
 		{
-			w->color = w->teximg[8].data[y % SKYSIZE * SKYSIZE  + ((int)fabs(1.0 * w->skyangle) + x / 2) % SKYSIZE];
+			w->color = w->teximg[8].data[y % SKYSIZE * SKYSIZE  + ((int)fabs(1.0 * w->skyangle) + x) % SKYSIZE];
 			w->img.data[y * WWIN + x] = w->color;
 		}
 		y++;

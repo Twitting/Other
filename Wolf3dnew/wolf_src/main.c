@@ -6,7 +6,7 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/20 17:17:31 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/23 18:20:45 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ void    wininit(t_wolf *wolf)
 	wolf->img.img_ptr = mlx_new_image(wolf->mlx_ptr, WWIN, HWIN);
 	wolf->img.data = (int *)mlx_get_data_addr(wolf->img.img_ptr, &wolf->img.bpp, \
 	&wolf->img.size_l, &wolf->img.endian);
+	wolf->lefttoggler = 0;
+	wolf->righttoggler = 0;
+	wolf->uptoggler = 0;
+	wolf->downtoggler = 0;
+	wolf->fps = 0;
+	wolf->timer = 0;
 	textoimg(wolf);
 	system("afplay music.mp3 &");
 }
@@ -51,17 +57,19 @@ int		main(int argc, char **argv)
 
 	if (argc == 2)
 	{
-		if (!(wolf.map = getintmap(argv[1])))
+		wolf.sprcount = 0;
+		if (!(wolf.map = getintmap(argv[1], &wolf)))
 			return (1);
 		wininit(&wolf);
 		caster_init(&wolf);	
 	}
 	else
 		ft_error(1, NULL);
-	mlx_key_hook(wolf.win_ptr, keyboard, &wolf);
-	mlx_hook(wolf.win_ptr, 2, 1L << 0, move_keys, &wolf);
-	mlx_hook(wolf.win_ptr, 17, 1L << 17, crossclose, &wolf);
 	mlx_loop_hook(wolf.mlx_ptr, raycaster, &wolf);
+	mlx_hook(wolf.win_ptr, 2, 1L << 0, key_press, &wolf);
+	mlx_hook(wolf.win_ptr, 3, 1L << 0, key_release, &wolf);
+	//mlx_hook(wolf.win_ptr, 6, 1L << 6, mouse_move, &wolf);
+	mlx_hook(wolf.win_ptr, 17, 1L << 17, crossclose, &wolf);
 	mlx_loop(wolf.mlx_ptr);
 	return (0);
 }

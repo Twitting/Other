@@ -6,7 +6,7 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:59:41 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/21 17:13:49 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/23 18:26:03 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void    findhit(t_wolf *w)
 			else
 				w->side = 3;		
 		}
-		if (w->map[w->mapy][w->mapx] > 0)
+		if (w->map[w->mapy][w->mapx] > 0 && w->map[w->mapy][w->mapx] < 10)
 			w->hit = 1;
 	}
 	if (w->side == 0 || w->side == 2)
@@ -81,6 +81,7 @@ void    findhit(t_wolf *w)
 void    drawline(t_wolf *w, int x)
 {
 	x = (WWIN - 1) - x;
+	w->zbuffer[x] = w->perpwalldist;
 	w->lineheight = (int)(HWIN / w->perpwalldist);
 	w->drawstart = -1 * w->lineheight / 2 + HWIN / 2;
 	if (w->drawstart < 0)
@@ -94,7 +95,9 @@ void    drawline(t_wolf *w, int x)
 int    raycaster(t_wolf *w)
 {
 	int     x;
+	double	frame;
 
+	frame = clock();
 	x = 0;
 	while (x < WWIN)
 	{
@@ -113,6 +116,18 @@ int    raycaster(t_wolf *w)
 		drawfloor(w, x);
 		x++;
 	}
+	spritecaster(w);
+	moving(w);
 	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img.img_ptr, 0, 0);
+	w->fps++;
+	w->timer += (clock() - frame) / CLOCKS_PER_SEC;
+	if (w->timer >= 1.0)
+	{
+		ft_putstr("fps = ");
+		ft_putnbr(w->fps);
+		ft_putchar('\n');
+		w->fps = 0;
+		w->timer -= 1;
+	}
 	return (0);
 }

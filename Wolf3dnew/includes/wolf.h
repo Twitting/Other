@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/21 19:35:03 by ebednar          ###   ########.fr       */
+/*   Updated: 2019/02/23 18:20:45 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <math.h>
+# include <time.h>
 # include "../libft/libft.h"
 # include "mlx.h"
 
 
 #include <stdio.h>/////////////////////////////////
 
-# define WWIN 2400
-# define HWIN 1300
+# define WWIN 1280
+# define HWIN 720
 # define KEY_UP 126
 # define KEY_DOWN 125
 # define KEY_LEFT 123
@@ -50,6 +51,8 @@ typedef	struct s_sprite
 	double		x;
 	double		y;
 	int			texture;
+	double		spritedistance;
+	int			spriteorder;
 }				t_sprite;
 
 
@@ -69,7 +72,7 @@ typedef struct	s_wolf
 	void		*mlx_ptr;
 	void		*win_ptr;
 	t_img		img;
-	t_img		teximg[9];
+	t_img		teximg[11];
 	int			**map;
 	double		posx;
 	double		posy;
@@ -98,6 +101,7 @@ typedef struct	s_wolf
 	int			texnum;
 	double		wallx;
 	int			texx;
+	int			texy;
 	double		floorxwall;
 	double		floorywall;
 	double		distplayer;
@@ -108,16 +112,41 @@ typedef struct	s_wolf
 	int			floortexx;
 	int			floortexy;
 	int			skyangle;
+	double		zbuffer[WWIN];
+	int			sprcount;
+	t_sprite	*sprite;
+	double		spritex;
+	double		spritey;
+	double		transformx;
+	double		transformy;
+	int			spritescreenx;
+	int			spriteheight;
+	int			spritewidth;
+	int			drawstarty;
+	int			drawendy;
+	int			drawstartx;
+	int			drawendx;
+	int			uptoggler;
+	int			downtoggler;
+	int			lefttoggler;
+	int			righttoggler;
+	int			fps;
+	double		timer;
 }				t_wolf;
 
+int		key_press(int key, t_wolf *w);
+int		key_release(int key, t_wolf *w);
 void	drawfloor(t_wolf *w, int x);
 int		crossclose(void *param);
 void	texdraw(t_wolf *w, int x);
 void	textoimg(t_wolf *w);
 int		keyboard(int key, void *param);
 void	caster_init(t_wolf *wolf);
-int		**getintmap(char *filename);
+int		**getintmap(char *filename, t_wolf *w);
 int		raycaster(t_wolf *wolf);
-int		move_keys(int key, t_wolf *wolf);
+void	moving(t_wolf *w);
+void	findsprites(t_wolf *w, int mapsize[2], int **map);
+int		mouse_move(int x, int y, t_wolf *w);
+void	spritecaster(t_wolf *w);
 
 #endif

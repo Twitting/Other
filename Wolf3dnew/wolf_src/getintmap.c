@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   getintmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: twitting <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/13 15:15:14 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/22 16:45:02 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,23 +79,28 @@ int		**mapmalloc(int **map, int heigth, int width)
 	return (map);
 }
 
-void	makemapstr(int counter, int *mapsize, int **map, char *line)
+int	makemapstr(int counter, int *mapsize, int **map, char *line)
 {
 	int i;
+	int	sprites;
 
 	i = 0;
+	sprites = 0;
 	while (i < mapsize[1])
 	{
 		map[counter][i] = ft_atoi(line);
+		if (map[counter][i] >= 10)
+			sprites++;
 		while (*line != ' ' && *line != '\0')
 			line++;
 		while (*line == ' ')
 			line++;
 		i++;
 	}
+	return (sprites);
 }
 
-int		**getintmap(char *filename)
+int		**getintmap(char *filename, t_wolf *w)
 {
 	int	**map;
 	int fd;
@@ -112,10 +117,11 @@ int		**getintmap(char *filename)
 		return (NULL);
 	while (get_next_line(fd, &line))
 	{
-		makemapstr(counter, mapsize, map, line);
+		w->sprcount += makemapstr(counter, mapsize, map, line);
 		free(line);
-		counter++;
+		counter++;	
 	}
+	findsprites(w, mapsize, map);
 	close(fd);
 	return (map);
 }
