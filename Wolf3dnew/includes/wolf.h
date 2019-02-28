@@ -6,7 +6,7 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/23 18:20:45 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/28 17:29:30 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,19 @@
 # include <fcntl.h>
 # include <math.h>
 # include <time.h>
-# include "../libft/libft.h"
+# include "libft.h"
 # include "mlx.h"
 
-
-#include <stdio.h>/////////////////////////////////
-
-# define WWIN 1280
-# define HWIN 720
+# define WWIN 1680
+# define HWIN 1050
 # define KEY_UP 126
 # define KEY_DOWN 125
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 # define KEY_ESCAPE 53
+# define KEY_SPACE 49
 # define TEXS 64
-# define SKYSIZE 1920
+# define SKYSIZE 3840
 # define TEX0 "textures/colorstone.xpm"
 # define TEX1 "textures/mossy.xpm"
 # define TEX2 "textures/purplestone.xpm"
@@ -43,18 +41,20 @@
 # define TEX7 "textures/greystone.xpm"
 # define SKY "textures/sky.xpm"
 # define BAR "textures/barrel.xpm"
+# define SW1 "textures/sw1.xpm"
+# define SW2 "textures/sw2.xpm"
+# define SW3 "textures/sw3.xpm"
+# define ANG 3 * M_PI / 180
 # define CEILING 0x333333;
 # define FLOOR 0x666666;
 
-typedef	struct s_sprite
+typedef	struct	s_sprite
 {
 	double		x;
 	double		y;
 	int			texture;
-	double		spritedistance;
-	int			spriteorder;
+	double		spritedist;
 }				t_sprite;
-
 
 typedef struct	s_img
 {
@@ -72,7 +72,7 @@ typedef struct	s_wolf
 	void		*mlx_ptr;
 	void		*win_ptr;
 	t_img		img;
-	t_img		teximg[11];
+	t_img		teximg[14];
 	int			**map;
 	double		posx;
 	double		posy;
@@ -131,22 +131,29 @@ typedef struct	s_wolf
 	int			lefttoggler;
 	int			righttoggler;
 	int			fps;
+	int			oldfps;
+	char		*fpsstr;
+	double		frame;
 	double		timer;
+	int			swing;
+	int			mapsizex;
+	int			mapsizey;
 }				t_wolf;
 
-int		key_press(int key, t_wolf *w);
-int		key_release(int key, t_wolf *w);
-void	drawfloor(t_wolf *w, int x);
-int		crossclose(void *param);
-void	texdraw(t_wolf *w, int x);
-void	textoimg(t_wolf *w);
-int		keyboard(int key, void *param);
-void	caster_init(t_wolf *wolf);
-int		**getintmap(char *filename, t_wolf *w);
-int		raycaster(t_wolf *wolf);
-void	moving(t_wolf *w);
-void	findsprites(t_wolf *w, int mapsize[2], int **map);
-int		mouse_move(int x, int y, t_wolf *w);
-void	spritecaster(t_wolf *w);
+void			ft_error(int errnum);
+int				key_press(int key, t_wolf *w);
+int				key_release(int key, t_wolf *w);
+void			drawfloor(t_wolf *w, int x);
+int				crossclose(void *param);
+void			texdraw(t_wolf *w, int x);
+void			textoimg(t_wolf *w);
+int				keyboard(int key, void *param);
+void			caster_init(t_wolf *wolf);
+int				**getintmap(char *filename, t_wolf *w);
+int				raycaster(t_wolf *wolf);
+void			moving(t_wolf *w);
+void			findsprites(t_wolf *w, int mapsize[2], int **map);
+int				mouse_move(int x, int y, t_wolf *w);
+void			spritecaster(t_wolf *w);
 
 #endif

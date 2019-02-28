@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
+/*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 12:22:16 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/23 14:51:53 by ebednar          ###   ########.fr       */
+/*   Updated: 2019/02/26 17:47:50 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
-
-void	textoimg(t_wolf *w)
-{
-	char	*str[11];
-	int		i;
-
-	i = 0;
-	str[0] = TEX0;
-	str[1] = TEX1;
-	str[2] = TEX2;
-	str[3] = TEX3;
-	str[4] = TEX4;
-	str[5] = TEX5;
-	str[6] = TEX6;
-	str[7] = TEX7;
-	str[8] = SKY;
-	str[9] = BAR;
-	str[10] = BAR;
-	while (i < 11)
-	{
-		w->teximg[i].img_ptr = mlx_xpm_file_to_image(w->mlx_ptr, str[i], \
-				&w->teximg[i].txtwidth, &w->teximg[i].txtheight);
-		w->teximg[i].data = (int *)mlx_get_data_addr(w->teximg[i].img_ptr, \
-			&w->teximg[i].bpp, &w->teximg[i].size_l, &w->teximg[i].endian);
-		i++;
-	}
-}
 
 void	floorandceiling(t_wolf *w, int x)
 {
@@ -48,7 +21,8 @@ void	floorandceiling(t_wolf *w, int x)
 	{
 		if (y <= w->drawstart)
 		{
-			w->color = w->teximg[8].data[y % SKYSIZE * SKYSIZE  + ((int)fabs(1.0 * w->skyangle) + x) % SKYSIZE];
+			w->color = w->teximg[8].data[y % SKYSIZE * SKYSIZE +
+			((int)fabs(1.0 * w->skyangle) + x) % SKYSIZE];
 			w->img.data[y * WWIN + x] = w->color;
 		}
 		y++;
@@ -90,9 +64,12 @@ void	drawfloor(t_wolf *w, int x)
 	while (y < HWIN)
 	{
 		w->currentdist = HWIN / (2.0 * y - HWIN);
-		w->weight = (w->currentdist - w->distplayer) / (w->perpwalldist - w->distplayer);
-		w->currentfloorx = w->weight * w->floorxwall + (1.0 - w->weight) * w->posx;
-		w->currentfloory = w->weight * w->floorywall + (1.0 - w->weight) * w->posy;
+		w->weight = (w->currentdist - w->distplayer) /
+		(w->perpwalldist - w->distplayer);
+		w->currentfloorx = w->weight * w->floorxwall +
+		(1.0 - w->weight) * w->posx;
+		w->currentfloory = w->weight * w->floorywall +
+		(1.0 - w->weight) * w->posy;
 		w->floortexx = (int)(w->currentfloorx * TEXS) % TEXS;
 		w->floortexy = (int)(w->currentfloory * TEXS) % TEXS;
 		w->color = w->teximg[6].data[TEXS * w->floortexy + w->floortexx];
@@ -101,13 +78,8 @@ void	drawfloor(t_wolf *w, int x)
 	}
 }
 
-void	texdraw(t_wolf *w, int x)
+void	texcalc(t_wolf *w)
 {
-	int	y;
-	int	texy;
-
-	w->texnum = w->map[w->mapy][w->mapx] - 1;
-	y = w->drawstart;
 	if (w->side == 0 || w->side == 2)
 		w->wallx = w->posy + w->perpwalldist * w->raydiry;
 	else
@@ -118,10 +90,26 @@ void	texdraw(t_wolf *w, int x)
 		w->texx = TEXS - w->texx - 1;
 	if ((w->side == 1 || w->side == 3) && w->raydiry < 0)
 		w->texx = TEXS - w->texx - 1;
+}
+
+void	texdraw(t_wolf *w, int x)
+{
+	int	y;
+	int	texy;
+
+	if ((w->mapx == w->mapsizex) || (w->mapy == w->mapsizey) || (w->mapx < 0) ||
+		(w->mapy < 0))
+		w->texnum = 0;
+	else
+		w->texnum = w->map[w->mapy][w->mapx] - 1;
+	y = w->drawstart;
+	texcalc(w);
 	while (y <= w->drawend)
 	{
-		texy = (((y - (HWIN / 2) + (w->lineheight / 2)) * TEXS) / w->lineheight);
-		w->color = w->teximg[w->texnum + (w->side / 2)].data[TEXS * texy + w->texx];
+		texy = (((y - (HWIN / 2) + (w->lineheight / 2)) * TEXS)
+		/ w->lineheight);
+		w->color = w->teximg[w->texnum + (w->side / 2)].data[TEXS *
+		texy + w->texx];
 		if (w->side == 1 || w->side == 3)
 			w->color /= 2;
 		w->img.data[y * WWIN + x] = w->color;

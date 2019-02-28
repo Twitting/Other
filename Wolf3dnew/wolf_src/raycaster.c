@@ -6,24 +6,13 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 14:59:41 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/23 18:26:03 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/28 17:30:00 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-void    caster_init(t_wolf *wolf)
-{
-	wolf->posx = 10;
-	wolf->posy = 4;
-	wolf->dirx = -1;
-	wolf->diry = 0;
-	wolf->planex = 0;
-	wolf->planey = 0.66;
-	wolf->skyangle = 0;
-}
-
-void    sidecalc(t_wolf *w)
+void	sidecalc(t_wolf *w)
 {
 	if (w->raydirx < 0)
 	{
@@ -47,7 +36,7 @@ void    sidecalc(t_wolf *w)
 	}
 }
 
-void    findhit(t_wolf *w)
+void	findhit(t_wolf *w)
 {
 	while (w->hit == 0)
 	{
@@ -55,30 +44,28 @@ void    findhit(t_wolf *w)
 		{
 			w->sidedistx += w->deltadistx;
 			w->mapx += w->stepx;
-			if (w->raydirx < 0)
-				w->side = 0;
-			else
-				w->side = 2;
+			w->side = w->raydirx < 0 ? 0 : 2;
 		}
 		else
 		{
 			w->sidedisty += w->deltadisty;
 			w->mapy += w->stepy;
-			if (w->raydiry < 0)
-				w->side = 1;
-			else
-				w->side = 3;		
+			w->side = w->raydiry < 0 ? 1 : 3;
 		}
-		if (w->map[w->mapy][w->mapx] > 0 && w->map[w->mapy][w->mapx] < 10)
+		if ((w->mapx == w->mapsizex) || (w->mapy == w->mapsizey) ||
+		(w->mapx < 0) || (w->mapy < 0) || (w->map[w->mapy][w->mapx] > 0
+		&& w->map[w->mapy][w->mapx] < 10))
 			w->hit = 1;
 	}
 	if (w->side == 0 || w->side == 2)
-		w->perpwalldist = (double)(w->mapx - w->posx + (1 - w->stepx) / 2.0) / w->raydirx;
+		w->perpwalldist = (double)(w->mapx - w->posx + (1 - w->stepx) / 2.0)
+		/ w->raydirx;
 	else
-		w->perpwalldist = (double)(w->mapy - w->posy + (1 - w->stepy) / 2.0) / w->raydiry;
+		w->perpwalldist = (double)(w->mapy - w->posy + (1 - w->stepy) / 2.0)
+		/ w->raydiry;
 }
 
-void    drawline(t_wolf *w, int x)
+void	drawline(t_wolf *w, int x)
 {
 	x = (WWIN - 1) - x;
 	w->zbuffer[x] = w->perpwalldist;
@@ -92,16 +79,43 @@ void    drawline(t_wolf *w, int x)
 	texdraw(w, x);
 }
 
-int    raycaster(t_wolf *w)
+void	fps(t_wolf *w)
 {
-	int     x;
-	double	frame;
-
-	frame = clock();
-	x = 0;
-	while (x < WWIN)
+	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img.img_ptr, 0, 0);
+	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr,
+	w->teximg[11 + w->swing].img_ptr, WWIN / 2 - 700, HWIN - 930);
+	if (w->swing == 1)
+		w->swing = 2;
+	w->fps++;
+	w->timer += (clock() - w->frame) / CLOCKS_PER_SEC;
+	if (w->timer >= 1.0)
 	{
-		w->color = 0x3333ff;
+		ft_putstr("fps = ");
+		ft_putnbr(w->fps);
+		ft_putchar('\n');
+		w->oldfps = w->fps;
+		w->fps = 0;
+		w->timer -= 1;
+		if ((w->uptoggler == 1 && w->downtoggler == 0) ||
+		(w->downtoggler == 1 && w->uptoggler == 0))
+			system("afplay sound/step.mp3 -t 1 -r 1.3 &");
+	}
+	if (w->oldfps != 0)
+	{
+		w->fpsstr = ft_itoa(w->oldfps);
+		mlx_string_put(w->mlx_ptr, w->win_ptr, 5, 5, 0xffffff, w->fpsstr);
+		free(w->fpsstr);
+	}
+}
+
+int		raycaster(t_wolf *w)
+{
+	int	x;
+
+	w->frame = clock();
+	x = -1;
+	while (++x < WWIN)
+	{
 		w->hit = 0;
 		w->camerax = 2.0 * (double)x / (double)WWIN - 1.0;
 		w->raydirx = w->dirx + w->planex * w->camerax;
@@ -114,20 +128,9 @@ int    raycaster(t_wolf *w)
 		findhit(w);
 		drawline(w, x);
 		drawfloor(w, x);
-		x++;
 	}
 	spritecaster(w);
 	moving(w);
-	mlx_put_image_to_window(w->mlx_ptr, w->win_ptr, w->img.img_ptr, 0, 0);
-	w->fps++;
-	w->timer += (clock() - frame) / CLOCKS_PER_SEC;
-	if (w->timer >= 1.0)
-	{
-		ft_putstr("fps = ");
-		ft_putnbr(w->fps);
-		ft_putchar('\n');
-		w->fps = 0;
-		w->timer -= 1;
-	}
+	fps(w);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: twitting <twitting@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:55:36 by twitting          #+#    #+#             */
-/*   Updated: 2019/02/22 16:45:02 by twitting         ###   ########.fr       */
+/*   Updated: 2019/02/27 16:17:18 by twitting         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		getmapsize(int *height, int *width, char *filename)
 	i = 0;
 	j = 0;
 	if ((fd = open(filename, O_RDONLY)) < 0)
-		return (0);
+		ft_error(3);
 	while (get_next_line(fd, &line) > 0)
 	{
 		if (j < getwidth(line))
@@ -55,6 +55,8 @@ int		getmapsize(int *height, int *width, char *filename)
 	*height = i;
 	*width = j;
 	close(fd);
+	if (i < 3 || j < 3)
+		ft_error(3);
 	return (1);
 }
 
@@ -66,11 +68,11 @@ int		**mapmalloc(int **map, int heigth, int width)
 	i = 0;
 	j = 0;
 	if (!(map = (int **)malloc(sizeof(int *) * (heigth + 1))))
-		return (NULL);
+		ft_error(2);
 	while (i < heigth)
 	{
 		if (!(map[i] = (int *)malloc(sizeof(int) * width)))
-			return (NULL);
+			ft_error(2);
 		while (j < width)
 			map[i][j++] = 0;
 		i++;
@@ -79,7 +81,7 @@ int		**mapmalloc(int **map, int heigth, int width)
 	return (map);
 }
 
-int	makemapstr(int counter, int *mapsize, int **map, char *line)
+int		makemapstr(int counter, int *mapsize, int **map, char *line)
 {
 	int i;
 	int	sprites;
@@ -89,7 +91,7 @@ int	makemapstr(int counter, int *mapsize, int **map, char *line)
 	while (i < mapsize[1])
 	{
 		map[counter][i] = ft_atoi(line);
-		if (map[counter][i] >= 10)
+		if (map[counter][i] == 10)
 			sprites++;
 		while (*line != ' ' && *line != '\0')
 			line++;
@@ -102,24 +104,23 @@ int	makemapstr(int counter, int *mapsize, int **map, char *line)
 
 int		**getintmap(char *filename, t_wolf *w)
 {
-	int	**map;
-	int fd;
+	int		**map;
+	int		fd;
 	char	*line;
-	int	mapsize[2];
+	int		mapsize[2];
 	int		counter;
 
 	counter = 0;
 	if ((fd = open(filename, O_RDONLY)) < 0)
-		return (NULL);
+		ft_error(3);
 	map = NULL;
 	getmapsize(&(mapsize[0]), &(mapsize[1]), filename);
-	if (!(map = mapmalloc(map, mapsize[0], mapsize[1])))
-		return (NULL);
+	map = mapmalloc(map, mapsize[0], mapsize[1]);
 	while (get_next_line(fd, &line))
 	{
 		w->sprcount += makemapstr(counter, mapsize, map, line);
 		free(line);
-		counter++;	
+		counter++;
 	}
 	findsprites(w, mapsize, map);
 	close(fd);
